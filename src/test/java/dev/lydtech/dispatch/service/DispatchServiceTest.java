@@ -1,23 +1,9 @@
 package dev.lydtech.dispatch.service;
 
-import dev.lydtech.dispatch.config.TopicConfig;
-import dev.lydtech.dispatch.message.OrderCreated;
-import dev.lydtech.dispatch.message.OrderDispatched;
-import dev.lydtech.dispatch.util.TestEventData;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.util.concurrent.CompletableFuture;
-
-import static java.util.UUID.randomUUID;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.any;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class DispatchServiceTest {

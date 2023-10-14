@@ -1,4 +1,4 @@
-package dev.lydtech.dispatch.message;
+package dev.lydtech.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDispatched {
-
+public class DispatchPreparing {
     UUID orderId;
 
 }

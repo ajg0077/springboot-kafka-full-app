@@ -1,14 +1,12 @@
 package dev.lydtech.dispatch.service;
 
 import dev.lydtech.dispatch.config.TopicConfig;
-import dev.lydtech.dispatch.message.OrderCreated;
-import dev.lydtech.dispatch.message.OrderDispatched;
+import dev.lydtech.message.DispatchPreparing;
+import dev.lydtech.message.OrderCreated;
+import dev.lydtech.message.OrderDispatched;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,5 +20,12 @@ public class DispatchService {
                 .build();
 
         kafkaTemplate.send(TopicConfig.ORDER_DISPATCHED_TOPIC, orderDispatched).get();
+
+        DispatchPreparing dispatchPreparing = DispatchPreparing.builder()
+                .orderId(orderCreated.getOrderId())
+                .build();
+
+        kafkaTemplate.send(TopicConfig.DISPATCH_TRACKING_TOPIC, dispatchPreparing).get();
+
     }
 }

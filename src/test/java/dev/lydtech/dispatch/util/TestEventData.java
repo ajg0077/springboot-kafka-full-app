@@ -1,6 +1,6 @@
 package dev.lydtech.dispatch.util;
 
-import dev.lydtech.dispatch.message.OrderCreated;
+import dev.lydtech.message.OrderCreated;
 
 import java.util.UUID;
 

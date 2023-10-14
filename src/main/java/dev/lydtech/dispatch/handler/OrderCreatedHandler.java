@@ -1,7 +1,7 @@
 package dev.lydtech.dispatch.handler;
 
 import dev.lydtech.dispatch.config.TopicConfig;
-import dev.lydtech.dispatch.message.OrderCreated;
+import dev.lydtech.message.OrderCreated;
 import dev.lydtech.dispatch.service.DispatchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
