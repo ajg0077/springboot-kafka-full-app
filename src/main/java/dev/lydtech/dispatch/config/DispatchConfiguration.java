@@ -3,8 +3,11 @@ package dev.lydtech.dispatch.config;
 import dev.lydtech.dispatch.message.OrderCreated;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
+import org.apache.kafka.common.security.plain.PlainLoginModule;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,8 +16,11 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,15 +66,18 @@ public class DispatchConfiguration {
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
-//    @Bean
-//    public KafkaAdmin kafkaAdmin() {
-//            Map<String, Object> configs = new HashMap<>();
-//            configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-//
-//            configs.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
-//            configs.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
-//            configs.put(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"PKW66QSXF4KLJSPU\" password=\"SfyxLApygzWOXZRopYZSeKrj7bHvPru62g2Ehs9MZVjkmUaPh+i+96bxZBSCj2sQ\";");
-//
-//        return new KafkaAdmin(configs);
-//    }
+    @Bean
+    public ProducerFactory<Object, Object> producerFactory() {
+        Map<String, Object> config = new HashMap<>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+
+        config.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_SSL");
+        config.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
+        config.put(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"PKW66QSXF4KLJSPU\" password=\"SfyxLApygzWOXZRopYZSeKrj7bHvPru62g2Ehs9MZVjkmUaPh+i+96bxZBSCj2sQ\";");
+
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+
 }

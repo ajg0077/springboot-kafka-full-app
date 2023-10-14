@@ -1,5 +1,6 @@
 package dev.lydtech.dispatch.handler;
 
+import dev.lydtech.dispatch.config.TopicConfig;
 import dev.lydtech.dispatch.message.OrderCreated;
 import dev.lydtech.dispatch.service.DispatchService;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +17,17 @@ public class OrderCreatedHandler {
 
     @KafkaListener(
             id = "orderConsumerClient",
-            topics = "order.created",
+            topics = TopicConfig.ORDER_CREATED_TOPIC,
             groupId = "dispatch.order.created.consumer",
             containerFactory = "kafkaListenerContainerFactory"
     )
     public void listen(OrderCreated payload) {
         log.info("Received message payload : " + payload);
-        dispatchService.process(payload);
+        try {
+            dispatchService.process(payload);
+        } catch (Exception e) {
+            log.error("Processing Failure",e);
+        }
     }
 
 }
