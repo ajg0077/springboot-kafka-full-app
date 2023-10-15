@@ -1,6 +1,5 @@
 package dev.lydtech.dispatch.config;
 
-import dev.lydtech.message.OrderCreated;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -29,6 +28,8 @@ public class DispatchConfiguration {
     @Value("${spring.kafka.properties.bootstrap.servers}")
     String bootstrapServers;
 
+    private static String TRUSTED_PACKAGES = "dev.lydtech.message";
+
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory(ConsumerFactory<String, Object> consumerFactory) {
 
@@ -50,7 +51,7 @@ public class DispatchConfiguration {
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, OrderCreated.class.getCanonicalName());
+        config.put(JsonDeserializer.TRUSTED_PACKAGES, TRUSTED_PACKAGES);
 
         config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         config.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 15000);
